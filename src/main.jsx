@@ -8,7 +8,7 @@ import HomePage from "./pages/home.jsx";
 import AdminDashBoard from "./admin/pages/AdminDashBoard.jsx";
 import {UserProvider} from "./utils/UserContext.jsx";
 import Projets from "./pages/projets.jsx";
-import PageTitle from "./common/PageTitle.jsx";
+import PageTitle from "./common/pageTitle.jsx";
 
 const routes = [
     {path: "/", element: <HomePage/>, title: "Accueil"},
