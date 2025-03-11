@@ -191,20 +191,11 @@ const ProjectsPage = () => {
             <Autocomplete
                 multiple
                 freeSolo
-                options={fixedOptions} // Options fixes
-                value={technologies} // Liste sélectionnée
-                onChange={handleChange} // Gestion du changement de valeur
-                inputValue={inputValue} // Gestion de la saisie
-                onInputChange={(event, newInputValue) => {
-                    setInputValue(newInputValue); // Mettre à jour la saisie actuelle
-                }}
+                value={technologiesArray}
+                onChange={handleTechnologiesChange}
                 renderTags={(value, getTagProps) =>
                     value.map((option, index) => (
-                        <Chip
-                            variant="outlined"
-                            label={option}
-                            {...getTagProps({ index })}
-                        />
+                        <Chip variant="outlined" label={option} {...getTagProps({ index })} />
                     ))
                 }
                 renderInput={(params) => (
@@ -212,12 +203,13 @@ const ProjectsPage = () => {
                         {...params}
                         variant="outlined"
                         label="Technologies"
-                        placeholder="Ajoutez des technologies"
+                        placeholder="Ajouter des technologies"
                     />
                 )}
             />
         );
     };
+
 
 
     // Chargement des projets (refactor pour une meilleure réutilisation)
@@ -383,9 +375,16 @@ const ProjectsPage = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <TechnologiesInput
-                                onChange={(value) => handleChange("technologies", value)} // Saisie des technologies
+                                value={form.technologies}
+                                onChange={(newValue) =>
+                                    setForm((prevForm) => ({
+                                        ...prevForm,
+                                        technologies: newValue,
+                                    }))
+                                }
                             />
                         </Grid>
+
                         <Grid item xs={12}>
                             <TextField
                                 name="status"
