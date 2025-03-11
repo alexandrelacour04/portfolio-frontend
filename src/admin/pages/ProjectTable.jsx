@@ -172,19 +172,18 @@ const ProjectsPage = () => {
         setSelectedProject(null);
     };
 
-    const TechnologiesInput = ({ onChange }) => {
-        const [inputValue, setInputValue] = useState(""); // Pour la gestion de la saisie
-        const [technologies, setTechnologies] = useState([]); // Liste des technologies sélectionnées
+    /**
+     * @param {string} value - Les technologies sous forme de chaîne séparée par des virgules.
+     * @param {function} onChange - Fonction appelée lorsque les technologies sont mises à jour.
+     */
+    const TechnologiesInput = ({ value, onChange }) => {
+        // Conversion des technologies en tableau en cas de modification
+        const technologiesArray = value ? value.split(",").map((tech) => tech.trim()) : [];
 
-        // Options fixes proposées par défaut (modifiable selon vos besoins)
-        const fixedOptions = ["React", "JavaScript", "Node.js", "Python", "Java", "Docker", "Kubernetes"];
-
-        const handleChange = (event, value) => {
-            setTechnologies(value); // Mettre à jour la liste des technologies sélectionnées
-
-            // Transmettre la liste sous forme de chaîne séparée par des `;` au parent via onChange
+        const handleTechnologiesChange = (event, newValue) => {
+            // La nouvelle valeur est combinée en une chaîne séparée par des virgules
             if (onChange) {
-                onChange(value.join(";"));
+                onChange(newValue.join(","));
             }
         };
 
