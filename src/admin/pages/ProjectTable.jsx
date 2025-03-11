@@ -17,6 +17,8 @@ import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import axios from "axios";
 import AddIcon from "@mui/icons-material/Add";
 import {Autocomplete} from "@mui/lab";
+import PropTypes from "prop-types";
+
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -171,12 +173,12 @@ const ProjectsPage = () => {
         setViewModalOpen(false);
         setSelectedProject(null);
     };
-
+    
     /**
      * @param {string} value - Les technologies sous forme de chaîne séparée par des virgules.
      * @param {function} onChange - Fonction appelée lorsque les technologies sont mises à jour.
      */
-    const TechnologiesInput = ({ value, onChange }) => {
+    const TechnologiesInput = ({value, onChange}) => {
         // Conversion des technologies en tableau en cas de modification
         const technologiesArray = value ? value.split(",").map((tech) => tech.trim()) : [];
 
@@ -195,7 +197,7 @@ const ProjectsPage = () => {
                 onChange={handleTechnologiesChange}
                 renderTags={(value, getTagProps) =>
                     value.map((option, index) => (
-                        <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                        <Chip key={index} variant="outlined" label={option} {...getTagProps({index})} />
                     ))
                 }
                 renderInput={(params) => (
@@ -208,6 +210,11 @@ const ProjectsPage = () => {
                 )}
             />
         );
+    };
+
+    TechnologiesInput.propTypes = {
+        value: PropTypes.string.isRequired,
+        onChange: PropTypes.func.isRequired,
     };
 
 
