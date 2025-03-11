@@ -17,6 +17,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import WorkIcon from '@mui/icons-material/Work';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import ContactsIcon from '@mui/icons-material/Contacts';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LoginModal from "./LoginModal.jsx";
 
 function MyAppBar() {
@@ -51,7 +52,7 @@ function MyAppBar() {
         { name: 'À propos', icon: <InfoIcon />, onClick: () => window.location.href = '/a-propos' },
         { name: 'Projets', icon: <WorkIcon />, onClick: () => window.location.href = '/projets' },
         { name: 'Contact', icon: <ContactsIcon />, onClick: () => window.location.href = '/contact' },
-        { name: 'Admin', icon: <ContactsIcon />, onClick: handleAdminClick },
+        { name: 'Admin', icon: <AdminPanelSettingsIcon />, onClick: handleAdminClick },
     ];
 
     return (
@@ -73,7 +74,7 @@ function MyAppBar() {
                         component="div"
                         sx={{ flexGrow: 1, fontWeight: 'bold' }}
                     >
-                        Mon Application
+                        Alexandre LACOUR
                     </Typography>
                     <Drawer
                         anchor="left"

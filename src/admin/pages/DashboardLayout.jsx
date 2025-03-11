@@ -46,7 +46,7 @@ const NAVIGATION = [
                 icon: <DatasetIcon />,
             },
             {
-                segment: 'projet',
+                segment: 'user',
                 title: 'Utilisateur',
                 icon: <DatasetIcon />,
             },

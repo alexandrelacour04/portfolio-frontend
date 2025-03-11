@@ -41,7 +41,7 @@ const TimelinesPage = () => {
     useEffect(() => {
         const fetchTimelines = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/timelines`);
+                const response = await axios.get(`${API_BASE_URL}/api/timelines`);
                 const formattedTimelines = response.data.content.map((timeline) => ({
                     ...timeline,
                     date: dayjs(timeline.date).format("DD/MM/YYYY"), // Formater la date
@@ -108,8 +108,8 @@ const TimelinesPage = () => {
     const handleSave = async () => {
         try {
             const url = selectedTimeline
-                ? `${API_BASE_URL}/timelines/${form.id}` // Modification
-                : `${API_BASE_URL}/timelines`; // Création
+                ? `${API_BASE_URL}/api/timelines/${form.id}` // Modification
+                : `${API_BASE_URL}/api/timelines`; // Création
 
             const method = selectedTimeline ? "put" : "post";
 
@@ -153,7 +153,7 @@ const TimelinesPage = () => {
     // Supprimer une timeline
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`${API_BASE_URL}/timelines/${id}`);
+            await axios.delete(`${API_BASE_URL}/api/timelines/${id}`);
             // Supprimer localement la timeline
             setTimelines((prev) => prev.filter((timeline) => timeline.id !== id));
         } catch (err) {

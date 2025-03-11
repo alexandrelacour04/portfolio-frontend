@@ -60,9 +60,11 @@ const HomePage = () => {
                         lineHeight: 1.8,
                     }}
                 >
-                    Bonjour, je m'appelle [Votre Nom], développeur expert en solutions innovantes !
-                    Spécialisé dans la conception d'applications web modernes et performantes,
-                    je combine design captivant et technologies avancées pour transformer vos idées en réalité.
+                    Bonjour, je m'appelle Alexandre Lacour, développeur passionné par les technologies modernes et les
+                    solutions innovantes.
+                    J'aime créer des applications web simples, performantes et adaptées aux besoins.
+                    Que ce soit pour un projet ambitieux ou pour améliorer une idée existante, je suis
+                    là pour apporter des solutions pratiques et efficaces.
                 </Typography>
                 <Button
                     variant="contained"
@@ -98,6 +100,10 @@ const HomePage = () => {
                             backgroundColor: theme.palette.background.paper,
                             boxShadow: `0 10px 20px ${theme.palette.primary.light}`,
                             transition: 'transform 0.3s ease-in-out',
+                            minHeight: 200,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
                             '&:hover': {
                                 transform: 'scale(1.05)',
                             },
@@ -115,7 +121,7 @@ const HomePage = () => {
                             Compétences Techniques
                         </Typography>
                         <Typography variant="body1" sx={{fontSize: '1rem', lineHeight: 1.6}}>
-                            Expertise en React, Node.js, TypeScript, Java, Spring Boot, DevOps et autres
+                            Expertise en React, Node.js, Java, Spring Boot, DevOps et autres
                             technologies indispensables à la réussite de vos projets.
                         </Typography>
                     </Paper>
@@ -129,6 +135,10 @@ const HomePage = () => {
                             backgroundColor: theme.palette.background.paper,
                             boxShadow: `0 10px 20px ${theme.palette.primary.light}`,
                             transition: 'transform 0.3s ease-in-out',
+                            minHeight: 200,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
                             '&:hover': {
                                 transform: 'scale(1.05)',
                             },
@@ -146,8 +156,8 @@ const HomePage = () => {
                             Projets Innovants
                         </Typography>
                         <Typography variant="body1" sx={{fontSize: '1rem', lineHeight: 1.6}}>
-                            Un portfolio diversifié de projets créatifs, alliant performance, innovation
-                            et design de qualité. Découvrez des solutions concrètes pour des enjeux complexes.
+                            Un aperçu de projets combinant performance, innovation
+                            et design soigné. Découvrez des solutions adaptées à divers enjeux.
                         </Typography>
                     </Paper>
                 </Grid>
@@ -160,6 +170,10 @@ const HomePage = () => {
                             backgroundColor: theme.palette.background.paper,
                             boxShadow: `0 10px 20px ${theme.palette.primary.light}`,
                             transition: 'transform 0.3s ease-in-out',
+                            minHeight: 200,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
                             '&:hover': {
                                 transform: 'scale(1.05)',
                             }
@@ -174,11 +188,11 @@ const HomePage = () => {
                                 letterSpacing: 1,
                             }}
                         >
-                            Collaboration & Partenariats
+                            Contact & Collaboration
                         </Typography>
                         <Typography variant="body1" sx={{fontSize: '1rem', lineHeight: 1.6}}>
-                            Des méthodes de travail flexibles et collaboratives pour garantir un environnement
-                            propice à votre succès. Contactez-moi pour débuter une belle aventure digitale.
+                            Ouvert aux nouvelles opportunités et projets. N'hésitez pas à me contacter pour discuter
+                            d'une collaboration ou échanger des idées.
                         </Typography>
                     </Paper>
                 </Grid>
@@ -207,7 +221,7 @@ const HomePage = () => {
                         color="inherit"
                         startIcon={<FontAwesomeIcon icon={faGithub}/>}
                         sx={{marginRight: 2}}
-                        href="https://github.com/votreprofil"
+                        href="https://github.com/alexandrelacour04"
                         target="_blank"
                     >
                         GitHub
@@ -217,20 +231,20 @@ const HomePage = () => {
                         color="inherit"
                         startIcon={<FontAwesomeIcon icon={faLinkedin}/>}
                         sx={{marginRight: 2}}
-                        href="https://linkedin.com/in/votreprofil"
+                        href="https://linkedin.com/in/lacouralexandre56"
                         target="_blank"
                     >
                         LinkedIn
                     </Button>
-                    <Button
-                        variant="outlined"
-                        color="inherit"
-                        startIcon={<FontAwesomeIcon icon={faTwitter}/>}
-                        href="https://twitter.com/votreprofil"
-                        target="_blank"
-                    >
-                        Twitter
-                    </Button>
+                    {/*<Button*/}
+                    {/*    variant="outlined"*/}
+                    {/*    color="inherit"*/}
+                    {/*    startIcon={<FontAwesomeIcon icon={faTwitter}/>}*/}
+                    {/*    href="https://twitter.com/votreprofil"*/}
+                    {/*    target="_blank"*/}
+                    {/*>*/}
+                    {/*    Twitter*/}
+                    {/*</Button>*/}
                 </Box>
             </Box>
         </Box>

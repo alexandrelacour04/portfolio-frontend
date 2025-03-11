@@ -37,7 +37,7 @@ const UsersPage = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/users`);
+                const response = await axios.get(`${API_BASE_URL}/api/users`);
                 setUsers(response.data); // Assurez-vous que l'API retourne un tableau
             } catch (e) {
                 setError("Erreur lors de la récupération des données");
@@ -140,35 +140,65 @@ const UsersPage = () => {
     // Ajouter ou modifier un utilisateur
     const handleSave = async () => {
         try {
+            const cleanedForm = {
+                id: form.id,
+                username: form.username,
+                firstName: form.firstName,
+                lastName: form.lastName,
+                email: form.email,
+                password: form.password,
+                role: form.role,
+                active: form.active ?? true,
+            };
+
+            console.log("Payload envoyé :", cleanedForm); // Ajoutez ce log pour inspection
+
             const url = selectedUser
-                ? `${API_BASE_URL}/users/${form.id}` // Modification
-                : `${API_BASE_URL}/users`; // Création
+                ? `${API_BASE_URL}/api/users/${form.id}`
+                : `${API_BASE_URL}/api/users`;
 
             const method = selectedUser ? "put" : "post";
 
-            const response = await axios[method](url, form);
+            const response = await axios[method](url, cleanedForm);
 
             if (selectedUser) {
-                // Mettre à jour localement l'utilisateur existant
                 setUsers((prev) =>
                     prev.map((user) => (user.id === form.id ? response.data : user))
                 );
             } else {
-                // Ajouter un nouvel utilisateur
                 setUsers((prev) => [...prev, response.data]);
             }
 
             handleCloseModal();
         } catch (err) {
-            console.error("Erreur lors de la sauvegarde :", err);
+            // Log des détails de l'erreur
+            console.error(
+                "Erreur lors de la sauvegarde :",
+                err.response ? err.response.data : err.message
+            );
             setError("Une erreur s'est produite pendant l'enregistrement.");
         }
+    };
+
+    const handleOpenCreateModal = () => {
+        setSelectedUser(null); // Pas d'utilisateur sélectionné
+        setForm({
+            id: "", // Id vide pour une création
+            username: "",
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            role: "USER",
+            active: true,
+        });
+        setModalOpen(true); // Ouvrir la modal
     };
 
     // Supprimer un utilisateur
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`${API_BASE_URL}/users/${id}`);
+            await axios.delete(`${API_BASE_URL}/api/users/${id}`);
             setUsers((prev) => prev.filter((user) => user.id !== id)); // Mise à jour locale après suppression
         } catch (e) {
             console.error("Erreur lors de la suppression :", e);
@@ -188,7 +218,8 @@ const UsersPage = () => {
                 <Button
                     variant="contained"
                     startIcon={<AddIcon/>}
-                    onClick={handleOpenModal}
+                    onClick={handleOpenCreateModal}
+                    startIcon={<AddIcon/>}
                 >
                     Créer un Compte
                 </Button>
