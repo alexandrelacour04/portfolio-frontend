@@ -7,6 +7,7 @@ import DefaultLayout from "./common/DefaultLayout.jsx";
 import HomePage from "./pages/home.jsx";
 import AdminDashBoard from "./admin/pages/AdminDashBoard.jsx";
 import {UserProvider} from "./utils/UserContext.jsx";
+import Projets from "./pages/projets.jsx";
 
 createRoot(document.getElementById('root')).render(
     <UserProvider>
@@ -35,6 +36,14 @@ createRoot(document.getElementById('root')).render(
                         element={
                             <DefaultLayout>
                                 <AdminDashBoard/>
+                            </DefaultLayout>
+                        }
+                    />
+                    <Route
+                        path="/projets"
+                        element={
+                            <DefaultLayout>
+                                <Projets/>
                             </DefaultLayout>
                         }
                     />

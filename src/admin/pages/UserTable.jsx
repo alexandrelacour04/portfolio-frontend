@@ -234,11 +234,11 @@ const UsersPage = () => {
                         columns={columns}
                         pageSize={10}
                         rowsPerPageOptions={[5, 10, 25, 50]}
-                        checkboxSelection
-                        disableSelectionOnClick
                         getRowHeight={() => 'auto'}
                         keepNonExistentRowsSelected
                         columnWidthBuffer={30}
+                        checkboxSelection={false} // Désactivation des cases à cocher pour la sélection
+                        disableSelectionOnClick={true} // Empêche la sélection des lignes au clic
                         getRowId={(row) => row.id}
                         slots={{
                             toolbar: GridToolbar,

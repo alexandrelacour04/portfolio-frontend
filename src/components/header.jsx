@@ -38,7 +38,7 @@ function MyAppBar() {
     const handleLoginSuccess = (user) => {
         console.log('Utilisateur connecté :', user);
         // Exemple : Vérification si l'utilisateur est admin
-        if (user.role === 'ADMIN') {
+        if (user.role !== 'USER') {
             // Rediriger vers la page admin
             window.location.href = '/admin';
         } else {

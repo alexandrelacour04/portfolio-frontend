@@ -11,11 +11,12 @@ import {
     Grid,
     MenuItem,
     Switch,
-    FormControlLabel, Card, CardContent, CardActions,
+    FormControlLabel, Card, CardContent, CardActions, Chip,
 } from "@mui/material";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import axios from "axios";
 import AddIcon from "@mui/icons-material/Add";
+import {Autocomplete} from "@mui/lab";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -46,6 +47,8 @@ const ProjectsPage = () => {
 
     const statuses = ["En cours", "Terminé", "Archivé"]; // Liste des statuts possibles
     const types = ["Personnel", "Professionnel", "Open Source", "Autre"]; // Liste des types
+
+
 
     // Chargement des projets
     useEffect(() => {
@@ -169,6 +172,55 @@ const ProjectsPage = () => {
         setSelectedProject(null);
     };
 
+    const TechnologiesInput = ({ onChange }) => {
+        const [inputValue, setInputValue] = useState(""); // Pour la gestion de la saisie
+        const [technologies, setTechnologies] = useState([]); // Liste des technologies sélectionnées
+
+        // Options fixes proposées par défaut (modifiable selon vos besoins)
+        const fixedOptions = ["React", "JavaScript", "Node.js", "Python", "Java", "Docker", "Kubernetes"];
+
+        const handleChange = (event, value) => {
+            setTechnologies(value); // Mettre à jour la liste des technologies sélectionnées
+
+            // Transmettre la liste sous forme de chaîne séparée par des `;` au parent via onChange
+            if (onChange) {
+                onChange(value.join(";"));
+            }
+        };
+
+        return (
+            <Autocomplete
+                multiple
+                freeSolo
+                options={fixedOptions} // Options fixes
+                value={technologies} // Liste sélectionnée
+                onChange={handleChange} // Gestion du changement de valeur
+                inputValue={inputValue} // Gestion de la saisie
+                onInputChange={(event, newInputValue) => {
+                    setInputValue(newInputValue); // Mettre à jour la saisie actuelle
+                }}
+                renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                        <Chip
+                            variant="outlined"
+                            label={option}
+                            {...getTagProps({ index })}
+                        />
+                    ))
+                }
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        variant="outlined"
+                        label="Technologies"
+                        placeholder="Ajoutez des technologies"
+                    />
+                )}
+            />
+        );
+    };
+
+
     // Ajouter ou modifier un projet
     const handleSave = async () => {
         try {
@@ -222,9 +274,9 @@ const ProjectsPage = () => {
 
                     <DataGrid
                         getRowHeight={() => 'auto'}
-                        checkboxSelection
                         rowsPerPageOptions={[5, 10, 25, 50]}
-                        disableSelectionOnClick={true}
+                        checkboxSelection={false} // Désactivation des cases à cocher pour la sélection
+                        disableSelectionOnClick={true} // Empêche la sélection des lignes au clic
                         keepNonExistentRowsSelected
                         columnWidthBuffer={30}
                         rows={projects}
@@ -315,13 +367,8 @@ const ProjectsPage = () => {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField
-                                name="technologies"
-                                label="Technologies"
-                                value={form.technologies}
-                                onChange={handleFormChange}
-                                fullWidth
-                                variant="outlined"
+                            <TechnologiesInput
+                                onChange={(value) => handleChange("technologies", value)} // Saisie des technologies
                             />
                         </Grid>
                         <Grid item xs={12}>

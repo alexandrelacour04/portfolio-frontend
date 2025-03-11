@@ -260,15 +260,13 @@ const TimelinesPage = () => {
                 <Box sx={{height: "70vh", mt: 3}}>
                     <DataGrid
                         getRowHeight={() => 'auto'}
-                        checkboxSelection
                         rowsPerPageOptions={[5, 10, 25, 50]}
-                        disableSelectionOnClick={true} // Désactiver la sélection via clic sur la ligne
                         keepNonExistentRowsSelected
                         columnWidthBuffer={30}
                         rows={timelines}
                         columns={columns}
-
-
+                        checkboxSelection={false} // Désactivation des cases à cocher pour la sélection
+                        disableSelectionOnClick={true} // Empêche la sélection des lignes au clic
                         initialState={{
                             sorting: {
                                 sortModel: [{field: 'date', sort: 'asc'}], // Trie par défaut sur la colonne "date" (ordre croissant)
