@@ -219,7 +219,6 @@ const UsersPage = () => {
                     variant="contained"
                     startIcon={<AddIcon/>}
                     onClick={handleOpenCreateModal}
-                    startIcon={<AddIcon/>}
                 >
                     Créer un Compte
                 </Button>
