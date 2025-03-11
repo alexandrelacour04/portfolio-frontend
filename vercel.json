@@ -1,6 +1,8 @@
 {
-  "rewrites": [
-    { "source": "/timeline", "destination": "/" },
-    { "source": "/admin", "destination": "/" }
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
   ]
 }
