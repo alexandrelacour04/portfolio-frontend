@@ -19,7 +19,8 @@ import {
 } from '@mui/material';
 import Header from "../components/header.jsx";
 import axios from 'axios';
-import dayjs from 'dayjs'; // Pour le formatage des dates
+import dayjs from 'dayjs';
+import PageTitle from "../common/pageTitle.jsx"; // Pour le formatage des dates
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -97,6 +98,7 @@ const ProjectsPage = () => {
 
     return (
         <>
+            <PageTitle title="Projets" />
             <title>Mes Projets</title>
             <Header/>
             <Container

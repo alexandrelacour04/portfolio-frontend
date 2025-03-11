@@ -1,14 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Box, Button, Container, Typography, Grid, Paper} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import Header from '../components/header.jsx';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faGithub, faLinkedin, faTwitter} from '@fortawesome/free-brands-svg-icons';
+import PageTitle from "../common/pageTitle.jsx";
 
 const HomePage = () => {
     const theme = useTheme();
 
+
     return (
+
         <Box
             sx={{
                 minHeight: '100vh',
@@ -21,7 +24,7 @@ const HomePage = () => {
                 overflowX: 'hidden',
             }}
         >
-            <title>Mon Portfolio - Accueil</title>
+            {/*<PageTitle title="Accueil" />*/}
 
             {/* Header Section */}
             <Header/>

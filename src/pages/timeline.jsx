@@ -103,7 +103,6 @@ const PortfolioTimeline = () => {
 
     return (
         <>
-            <title>Mon Portfolio - Timeline</title>
             {/* Header Section */}
             <Header/>
 

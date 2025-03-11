@@ -231,7 +231,7 @@ const ProjectsPage = () => {
                 await axios.put(`${API_BASE_URL}/api/projects/${formattedForm.id}`, formattedForm);
             } else {
                 // Requête POST pour ajouter un nouveau projet
-                await axios.post('${API_BASE_URL}/api/projects', formattedForm);
+                await axios.post(`${API_BASE_URL}/api/projects`, formattedForm);
             }
 
             setModalOpen(false);
