@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/timeline", "destination": "/" },
+    { "source": "/admin", "destination": "/" }
+  ]
+}
