@@ -173,17 +173,21 @@ const ProjectsPage = () => {
         setViewModalOpen(false);
         setSelectedProject(null);
     };
-    
-    /**
-     * @param {string} value - Les technologies sous forme de chaîne séparée par des virgules.
-     * @param {function} onChange - Fonction appelée lorsque les technologies sont mises à jour.
-     */
-    const TechnologiesInput = ({value, onChange}) => {
-        // Conversion des technologies en tableau en cas de modification
-        const technologiesArray = value ? value.split(",").map((tech) => tech.trim()) : [];
 
-        const handleTechnologiesChange = (event, newValue) => {
-            // La nouvelle valeur est combinée en une chaîne séparée par des virgules
+    const TechnologiesInput = ({ value, onChange }) => {
+        const [inputValue, setInputValue] = useState(""); // Pour la gestion de la saisie
+        const [technologies, setTechnologies] = useState(
+            value ? value.split(",").map((tech) => tech.trim()) : [] // Initialisation à partir de la chaîne séparée par des virgules
+        );
+
+        // Options fixes proposées (modifiable selon le contexte du projet)
+        const fixedOptions = ["React", "JavaScript", "Node.js", "Python", "Java", "Docker", "Kubernetes"];
+
+        const handleChange = (event, newValue) => {
+            // Met à jour l'état local avec les technologies sélectionnées
+            setTechnologies(newValue);
+
+            // Transmet au parent la liste des technologies sous forme de chaîne séparée par des virgules
             if (onChange) {
                 onChange(newValue.join(","));
             }
@@ -193,11 +197,21 @@ const ProjectsPage = () => {
             <Autocomplete
                 multiple
                 freeSolo
-                value={technologiesArray}
-                onChange={handleTechnologiesChange}
+                options={fixedOptions} // Options fixes proposées
+                value={technologies} // Liste des technologies sélectionnées
+                onChange={handleChange} // Gestion de la mise à jour des technologies
+                inputValue={inputValue} // Saisie en cours
+                onInputChange={(event, newInputValue) => {
+                    setInputValue(newInputValue); // Met à jour la valeur de saisie
+                }}
                 renderTags={(value, getTagProps) =>
                     value.map((option, index) => (
-                        <Chip key={index} variant="outlined" label={option} {...getTagProps({index})} />
+                        <Chip
+                            key={index}
+                            variant="outlined"
+                            label={option}
+                            {...getTagProps({ index })}
+                        />
                     ))
                 }
                 renderInput={(params) => (
@@ -205,7 +219,7 @@ const ProjectsPage = () => {
                         {...params}
                         variant="outlined"
                         label="Technologies"
-                        placeholder="Ajouter des technologies"
+                        placeholder="Ajoutez des technologies"
                     />
                 )}
             />
@@ -213,11 +227,9 @@ const ProjectsPage = () => {
     };
 
     TechnologiesInput.propTypes = {
-        value: PropTypes.string.isRequired,
-        onChange: PropTypes.func.isRequired,
+        value: PropTypes.string, // Chaîne séparée par des virgules (ex : "React,Java")
+        onChange: PropTypes.func.isRequired, // Fonction de callback appelée lorsqu'une mise à jour est effectuée
     };
-
-
 
     // Chargement des projets (refactor pour une meilleure réutilisation)
     const fetchProjects = async () => {
@@ -382,16 +394,15 @@ const ProjectsPage = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <TechnologiesInput
-                                value={form.technologies}
+                                value={form.technologies} // Passer la chaîne existante des technologies
                                 onChange={(newValue) =>
                                     setForm((prevForm) => ({
                                         ...prevForm,
-                                        technologies: newValue,
+                                        technologies: newValue, // Mettre à jour les technologies dans le formulaire
                                     }))
                                 }
                             />
                         </Grid>
-
                         <Grid item xs={12}>
                             <TextField
                                 name="status"
