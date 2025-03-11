@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import { Box, Modal, Typography, TextField, Button, Alert } from '@mui/material';
+import {Box, Modal, Typography, TextField, Button, Alert} from '@mui/material';
 import axios from 'axios';
-import { useUser } from './../utils/UserContext'; // Import du contexte utilisateur
+import {useUser} from './../utils/UserContext'; // Import du contexte utilisateur
 
-const LoginModal = ({ open, onClose, onSuccess }) => {
-    const { saveUser } = useUser(); // Utiliser la fonction pour sauvegarder les informations utilisateur
-    const [credentials, setCredentials] = useState({ identifier: '', password: '' });
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+const LoginModal = ({open, onClose, onSuccess}) => {
+    const {saveUser} = useUser(); // Utiliser la fonction pour sauvegarder les informations utilisateur
+    const [credentials, setCredentials] = useState({identifier: '', password: ''});
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setCredentials({ ...credentials, [name]: value });
+        const {name, value} = event.target;
+        setCredentials({...credentials, [name]: value});
     };
 
     const handleSubmit = async (event) => {
@@ -22,7 +24,7 @@ const LoginModal = ({ open, onClose, onSuccess }) => {
 
         try {
             // Appeler l'API pour récupérer les utilisateurs
-            const response = await axios.get('http://localhost:8080/api/users');
+            const response = await axios.get(`${API_BASE_URL}/users`);
             const users = response.data;
 
             // Trouver un utilisateur correspondant à l'identifiant et au mot de passe
@@ -62,10 +64,10 @@ const LoginModal = ({ open, onClose, onSuccess }) => {
                     p: 4,
                 }}
             >
-                <Typography variant="h6" component="h2" sx={{ mb: 2, textAlign: 'center' }}>
+                <Typography variant="h6" component="h2" sx={{mb: 2, textAlign: 'center'}}>
                     Connexion
                 </Typography>
-                {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+                {error && <Alert severity="error" sx={{mb: 2}}>{error}</Alert>}
                 <form onSubmit={handleSubmit}>
                     <TextField
                         label="Email ou Nom d'utilisateur"
@@ -74,7 +76,7 @@ const LoginModal = ({ open, onClose, onSuccess }) => {
                         onChange={handleInputChange}
                         fullWidth
                         required
-                        sx={{ mb: 2 }}
+                        sx={{mb: 2}}
                     />
                     <TextField
                         label="Mot de passe"
@@ -84,7 +86,7 @@ const LoginModal = ({ open, onClose, onSuccess }) => {
                         onChange={handleInputChange}
                         fullWidth
                         required
-                        sx={{ mb: 2 }}
+                        sx={{mb: 2}}
                     />
                     <Button
                         type="submit"

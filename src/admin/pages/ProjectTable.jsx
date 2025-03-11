@@ -17,6 +17,8 @@ import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import axios from "axios";
 import AddIcon from "@mui/icons-material/Add";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const ProjectsPage = () => {
     const [projects, setProjects] = useState([]); // Liste des projets
     const [loading, setLoading] = useState(true); // État de chargement
@@ -49,7 +51,7 @@ const ProjectsPage = () => {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/projects");
+                const response = await axios.get(`${API_BASE_URL}/api/projects`);
                 setProjects(response.data.content); // Adapter selon le retour de l'API
             } catch (e) {
                 setError("Erreur lors de la récupération des données");
@@ -174,10 +176,10 @@ const ProjectsPage = () => {
 
             if (selectedProject) {
                 // Requête PUT pour mettre à jour un projet existant
-                await axios.put(`http://localhost:8080/api/projects/${formattedForm.id}`, formattedForm);
+                await axios.put(`${API_BASE_URL}/api/projects/${formattedForm.id}`, formattedForm);
             } else {
                 // Requête POST pour ajouter un nouveau projet
-                await axios.post("http://localhost:8080/api/projects", formattedForm);
+                await axios.post('${API_BASE_URL}/api/projects', formattedForm);
             }
 
             setModalOpen(false);
@@ -190,7 +192,7 @@ const ProjectsPage = () => {
     // Supprimer un projet
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:8080/api/projects/${id}`);
+            await axios.delete(`${API_BASE_URL}/api/projects/${id}`);
             setProjects((prev) => prev.filter((project) => project.id !== id));
         } catch (e) {
             setError("Erreur lors de la suppression du projet");

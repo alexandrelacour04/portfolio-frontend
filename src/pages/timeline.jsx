@@ -25,6 +25,8 @@ import axios from 'axios';
 import * as Icons from "@mui/icons-material";
 import dayjs from "dayjs"; // Import dayjs for date formatting
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const PortfolioTimeline = () => {
     const [events, setEvents] = useState([]); // Liste des événements
     const [loading, setLoading] = useState(true); // État de chargement
@@ -36,14 +38,13 @@ const PortfolioTimeline = () => {
     useEffect(() => {
         const fetchTimelines = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/timelines");
+                const response = await axios.get(`${API_BASE_URL}/api/timelines`);
 
                 // Trier les événements par date (plus ancienne en premier)
                 const sortedData = response.data.content.sort((a, b) => new Date(a.date) - new Date(b.date));
 
                 setEvents(sortedData); // Stocker les données triées dans le state
-            }
-            catch (e) {
+            } catch (e) {
                 setError("Erreur lors de la récupération des données de la timeline.");
             } finally {
                 setLoading(false);
@@ -106,7 +107,8 @@ const PortfolioTimeline = () => {
             {/* Header Section */}
             <Header/>
 
-            <Container sx={{mt: 4, display: "flex", justifyContent: "center", alignItems: "flex-start", height: "100vh"}}>
+            <Container
+                sx={{mt: 4, display: "flex", justifyContent: "center", alignItems: "flex-start", height: "100vh"}}>
                 <Box sx={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
                     <Typography variant="h4" color="text.primary" sx={{mb: 3}}>
                         Portfolio Timeline

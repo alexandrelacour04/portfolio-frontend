@@ -17,6 +17,8 @@ import IconSelector from "./../component/IconSelector"; // Importer IconSelector
 import * as Icons from "@mui/icons-material"; // Permet d'afficher les icônes
 import dayjs from "dayjs"; // Importation de dayjs pour la gestion des dates
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const TimelinesPage = () => {
     const [timelines, setTimelines] = useState([]); // Liste des timelines
     const [loading, setLoading] = useState(true); // État de chargement
@@ -39,7 +41,7 @@ const TimelinesPage = () => {
     useEffect(() => {
         const fetchTimelines = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/timelines");
+                const response = await axios.get(`${API_BASE_URL}/timelines`);
                 const formattedTimelines = response.data.content.map((timeline) => ({
                     ...timeline,
                     date: dayjs(timeline.date).format("DD/MM/YYYY"), // Formater la date
@@ -106,8 +108,8 @@ const TimelinesPage = () => {
     const handleSave = async () => {
         try {
             const url = selectedTimeline
-                ? `http://localhost:8080/api/timelines/${form.id}` // Modification
-                : "http://localhost:8080/api/timelines"; // Création
+                ? `${API_BASE_URL}/timelines/${form.id}` // Modification
+                : `${API_BASE_URL}/timelines`; // Création
 
             const method = selectedTimeline ? "put" : "post";
 
@@ -151,7 +153,7 @@ const TimelinesPage = () => {
     // Supprimer une timeline
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:8080/api/timelines/${id}`);
+            await axios.delete(`${API_BASE_URL}/timelines/${id}`);
             // Supprimer localement la timeline
             setTimelines((prev) => prev.filter((timeline) => timeline.id !== id));
         } catch (err) {

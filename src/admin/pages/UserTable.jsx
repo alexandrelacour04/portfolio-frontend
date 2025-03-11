@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
     Box,
     Button,
@@ -10,9 +10,11 @@ import {
     TextField,
     Grid,
 } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const UsersPage = () => {
     const [users, setUsers] = useState([]); // Liste des utilisateurs
@@ -35,7 +37,7 @@ const UsersPage = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/users");
+                const response = await axios.get(`${API_BASE_URL}/users`);
                 setUsers(response.data); // Assurez-vous que l'API retourne un tableau
             } catch (e) {
                 setError("Erreur lors de la récupération des données");
@@ -105,8 +107,8 @@ const UsersPage = () => {
 
     // Gestion des changements dans le formulaire
     const handleFormChange = (e) => {
-        const { name, value } = e.target;
-        setForm({ ...form, [name]: value });
+        const {name, value} = e.target;
+        setForm({...form, [name]: value});
     };
 
     // Ouvrir la modal pour ajouter/modifier un utilisateur
@@ -139,8 +141,8 @@ const UsersPage = () => {
     const handleSave = async () => {
         try {
             const url = selectedUser
-                ? `http://localhost:8080/api/users/${form.id}` // Modification
-                : "http://localhost:8080/api/users"; // Création
+                ? `${API_BASE_URL}/users/${form.id}` // Modification
+                : `${API_BASE_URL}/users`; // Création
 
             const method = selectedUser ? "put" : "post";
 
@@ -166,7 +168,7 @@ const UsersPage = () => {
     // Supprimer un utilisateur
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:8080/api/users/${id}`);
+            await axios.delete(`${API_BASE_URL}/users/${id}`);
             setUsers((prev) => prev.filter((user) => user.id !== id)); // Mise à jour locale après suppression
         } catch (e) {
             console.error("Erreur lors de la suppression :", e);
@@ -182,10 +184,10 @@ const UsersPage = () => {
 
             {error && <Alert severity="error">{error}</Alert>}
 
-            <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+            <Box sx={{display: "flex", justifyContent: "space-between", mb: 2}}>
                 <Button
                     variant="contained"
-                    startIcon={<AddIcon />}
+                    startIcon={<AddIcon/>}
                     onClick={handleOpenModal}
                 >
                     Créer un Compte
@@ -193,9 +195,9 @@ const UsersPage = () => {
             </Box>
 
             {loading ? (
-                <CircularProgress />
+                <CircularProgress/>
             ) : (
-                <Box sx={{ height: 600, width: "100%" }}>
+                <Box sx={{height: 600, width: "100%"}}>
                     <DataGrid
                         rows={users}
                         columns={columns}
@@ -306,7 +308,7 @@ const UsersPage = () => {
                         </Grid>
                     </Grid>
 
-                    <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
+                    <Box sx={{display: "flex", justifyContent: "space-between", mt: 3}}>
                         <Button onClick={handleCloseModal} color="secondary">
                             Annuler
                         </Button>
