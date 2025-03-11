@@ -221,6 +221,21 @@ const ProjectsPage = () => {
     };
 
 
+    // Chargement des projets (refactor pour une meilleure réutilisation)
+    const fetchProjects = async () => {
+        try {
+            setLoading(true); // Commence le chargement
+            const response = await axios.get(`${API_BASE_URL}/api/projects`);
+            setProjects(response.data.content); // Stocke les projets dans l'état
+            setError(null); // Réinitialise les erreurs s'il n'y a pas eu de problème
+        } catch (error) {
+            console.error("Erreur lors de la récupération des données :", error);
+            setError("Erreur lors de la récupération des données");
+        } finally {
+            setLoading(false); // Fin du chargement
+        }
+    };
+
     // Ajouter ou modifier un projet
     const handleSave = async () => {
         try {
@@ -238,6 +253,7 @@ const ProjectsPage = () => {
             fetchProjects(); // Rechargez les projets après une mise à jour
         } catch (error) {
             setError("Erreur lors de l'enregistrement du projet");
+            console.log(error);
         }
     };
 
