@@ -24,7 +24,7 @@ const LoginModal = ({open, onClose, onSuccess}) => {
 
         try {
             // Appeler l'API pour récupérer les utilisateurs
-            const response = await axios.get(`${API_BASE_URL}/users`);
+            const response = await axios.get(`${API_BASE_URL}/api/users`);
             const users = response.data;
 
             // Trouver un utilisateur correspondant à l'identifiant et au mot de passe
