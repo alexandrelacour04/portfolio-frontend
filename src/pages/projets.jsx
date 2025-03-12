@@ -162,24 +162,23 @@ const ProjectsPage = () => {
                                                 mt: 2,
                                             }}
                                         >
-                                            {(project.technologies ? project.technologies : ""
-)
-                                                .split(',')
-                                                .map((tech, index) => (
-                                                    <Chip
-                                                        key={index}
-                                                        label={tech.trim()}
-                                                        sx={{
-                                                            backgroundColor: `#${((tech.trim().charCodeAt(0) * 123456) % 0xFFFFFF)
-                                                                .toString(16)
-                                                                .padStart(6, "0")}`,
-                                                            color: 'white',
-                                                            fontWeight: 'bold',
-                                                            textTransform: 'capitalize',
-                                                            px: 2,
-                                                        }}
-                                                    />
-                                                ))}
+                                            {project.technologies && project.technologies.trim() !== "" &&
+                                                project.technologies.split(',')
+                                                    .map((tech, index) => (
+                                                        <Chip
+                                                            key={index}
+                                                            label={tech.trim()}
+                                                            sx={{
+                                                                backgroundColor: `#${((tech.trim().charCodeAt(0) * 123456) % 0xFFFFFF)
+                                                                    .toString(16)
+                                                                    .padStart(6, "0")}`,
+                                                                color: 'white',
+                                                                fontWeight: 'bold',
+                                                                textTransform: 'capitalize',
+                                                                px: 2,
+                                                            }}
+                                                        />
+                                                    ))}
                                         </Box>
                                     </CardContent>
                                     <CardActions sx={{justifyContent: 'center'}}/>
