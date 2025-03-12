@@ -257,7 +257,7 @@ const ProjectsPage = () => {
                             {selectedProject?.otherImages ? (
                                 <Slider
                                     {...sliderSettings}
-                                    appendDots={(dots) => (
+                                   appendDots={(dots) => (
                                         <Box
                                             sx={{
                                                 bottom: -30,
@@ -273,30 +273,28 @@ const ProjectsPage = () => {
                                     )}
                                     dotStyle={{width: 10, height: 10, backgroundColor: "gray", borderRadius: "50%"}}
                                 >
-                                    {selectedProject.otherImages.split('|£|').map((imageUrl, index) =>
-                                        imageUrl.trim() ? (
-                                            <Box key={index} sx={{textAlign: "center"}}>
-                                                <CardMedia
-                                                    component="img"
-                                                    height="300"
-                                                    image={imageUrl.trim()}
-                                                    alt={`Image ${index}`}
-                                                    sx={{
-                                                        objectFit: "cover",
-                                                        width: "100%",
-                                                    }}
-                                                />
-                                            </Box>
-                                        ) : null
-                                    )}
+                                    {selectedProject.otherImages.split('|£|').map((imageUrl, index) => (
+                                        <Box key={index} sx={{textAlign: "center"}}>
+                                            <CardMedia
+                                                component="img"
+                                                height="300"
+                                                image={imageUrl.trim()}
+                                                alt={`Image ${index}`}
+                                                sx={{
+                                                    objectFit: "cover",
+                                                    width: "100%",
+                                                }}
+                                            />
+                                        </Box>
+                                    ))}
                                 </Slider>
                             ) : (
                                 // Fallback à "coverImage" si "otherImages" est vide
-                                selectedProject?.coverImage && selectedProject.coverImage.trim() && (
+                                selectedProject?.coverImage && (
                                     <CardMedia
                                         component="img"
                                         height="300"
-                                        image={selectedProject.coverImage.trim()}
+                                        image={selectedProject.coverImage}
                                         alt={selectedProject.title}
                                         sx={{
                                             objectFit: "cover",

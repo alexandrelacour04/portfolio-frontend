@@ -1,6 +1,6 @@
 import React, {StrictMode} from 'react'
 import {createRoot} from 'react-dom/client'
-import {BrowserRouter as Router, Navigate, Route, Routes, useLocation} from 'react-router-dom'
+import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom'
 import './index.css'
 import Timeline from "./pages/timeline.jsx";
 import DefaultLayout from "./common/DefaultLayout.jsx";
