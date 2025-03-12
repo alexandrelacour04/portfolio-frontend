@@ -15,7 +15,7 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle,
+    DialogTitle, Chip,
 } from '@mui/material';
 import Header from "../components/header.jsx";
 import axios from 'axios';
@@ -132,7 +132,19 @@ const ProjectsPage = () => {
                     <Grid container spacing={4} justifyContent="center">
                         {projects.map((project) => (
                             <Grid item xs={12} sm={6} md={4} key={project.id}>
-                                <Card sx={{boxShadow: 3, borderRadius: 4}}>
+                                <Card
+                                    sx={{boxShadow: 3, borderRadius: 4, cursor: 'pointer'}}
+                                    onClick={() => handleOpen(project)}
+                                >
+                                    {project.coverImage && (
+                                        <CardMedia
+                                            component="img"
+                                            height="140"
+                                            image={project.coverImage}
+                                            alt={project.title}
+                                            sx={{objectFit: "cover"}}
+                                        />
+                                    )}
                                     <CardContent sx={{textAlign: 'center'}}>
                                         <Typography gutterBottom variant="h6" component="div" fontWeight="bold">
                                             {project.title}
@@ -140,18 +152,37 @@ const ProjectsPage = () => {
                                         <Typography variant="body2" color="text.secondary">
                                             {project.subtitle}
                                         </Typography>
-                                    </CardContent>
-                                    <CardActions sx={{justifyContent: 'center'}}>
-                                        <Button
-                                            size="small"
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={() => handleOpen(project)}
-                                            sx={{textTransform: 'none'}}
+
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                flexWrap: 'wrap',
+                                                gap: 1,
+                                                justifyContent: 'center',
+                                                mt: 2,
+                                            }}
                                         >
-                                            Voir Détails
-                                        </Button>
-                                    </CardActions>
+                                            {(project.technologies ? project.technologies : ""
+)
+                                                .split(',')
+                                                .map((tech, index) => (
+                                                    <Chip
+                                                        key={index}
+                                                        label={tech.trim()}
+                                                        sx={{
+                                                            backgroundColor: `#${((tech.trim().charCodeAt(0) * 123456) % 0xFFFFFF)
+                                                                .toString(16)
+                                                                .padStart(6, "0")}`,
+                                                            color: 'white',
+                                                            fontWeight: 'bold',
+                                                            textTransform: 'capitalize',
+                                                            px: 2,
+                                                        }}
+                                                    />
+                                                ))}
+                                        </Box>
+                                    </CardContent>
+                                    <CardActions sx={{justifyContent: 'center'}}/>
                                 </Card>
                             </Grid>
                         ))}
@@ -160,48 +191,141 @@ const ProjectsPage = () => {
             </Container>
 
             {/* Dialog pour afficher les détails du projet */}
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
                 {selectedProject && (
                     <>
-                        <DialogTitle sx={{textAlign: 'center', fontWeight: 'bold'}}>
+                        {selectedProject.coverImage && (
+                            <CardMedia
+                                component="img"
+                                height="300"
+                                image={selectedProject.coverImage}
+                                alt={selectedProject.title}
+                                sx={{objectFit: "cover"}}
+                            />
+                        )}
+                        <DialogTitle
+                            sx={{
+                                textAlign: 'center',
+                                fontWeight: 'bold',
+                                fontSize: '2rem',
+                                color: 'primary.main',
+                            }}
+                        >
                             {selectedProject.title}
                         </DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                <Typography variant="subtitle1" gutterBottom>
+                                <Typography variant="h6" gutterBottom sx={{fontWeight: 'bold', mb: 2}}>
                                     {selectedProject.subtitle}
                                 </Typography>
-                                <Typography variant="body2" gutterBottom>
+                                <Typography variant="body1" gutterBottom sx={{lineHeight: 1.8}}>
                                     {selectedProject.description || "Aucune description disponible."}
                                 </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    Tags : {selectedProject.tags || "Aucun"}
+                                <Typography variant="body2" color="text.secondary" sx={{mt: 2, mb: 2}}>
+                                    <strong>Tags :</strong> {selectedProject.tags || "Aucun"}
                                 </Typography>
-                                <Typography variant="body2" color="text.secondary" gutterBottom>
-                                    Technologies : {selectedProject.technologies || "Non spécifiées"}
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    Statut : {selectedProject.status || "Indéfini"}
-                                </Typography>
-                                {selectedProject.startDate && (
-                                    <Typography variant="body2" color="text.secondary">
-                                        Début : {dayjs(selectedProject.startDate).format("DD MMM YYYY")}
-                                    </Typography>
-                                )}
-                                {selectedProject.endDate && (
-                                    <Typography variant="body2" color="text.secondary">
-                                        Fin : {dayjs(selectedProject.endDate).format("DD MMM YYYY")}
-                                    </Typography>
-                                )}
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        flexWrap: 'wrap',
+                                        justifyContent: 'flex-start',
+                                    }}
+                                >
+                                    {(selectedProject.technologies || "Non spécifiées")
+                                        .split(',')
+                                        .map((tech, index) => {
+                                            const colorHash = `#${((tech.trim().charCodeAt(0) * 123450) % 0xFFFFFF)
+                                                .toString(16)
+                                                .padStart(6, "0")}`;
+                                            return (
+                                                <Typography
+                                                    key={index}
+                                                    variant="body2"
+                                                    color="text.primary"
+                                                    sx={{
+                                                        backgroundColor: colorHash,
+                                                        px: 2,
+                                                        py: 0.8,
+                                                        borderRadius: 20,
+                                                        display: 'inline-block',
+                                                        mx: 0.8,
+                                                        my: 0.8,
+                                                        fontWeight: 'bold',
+                                                        textAlign: 'center',
+                                                        fontSize: '0.875rem',
+                                                    }}
+                                                >
+                                                    {tech.trim()}
+                                                </Typography>
+                                            );
+                                        })}
+                                </Box>
+                                <Box sx={{display: 'flex', alignItems: 'center', gap: 2, mt: 2}}>
+                                    <Typography variant="body2" sx={{fontWeight: 'bold'}}>Statut :</Typography>
+                                    {selectedProject.status ? (
+                                        <Typography
+                                            variant="body2"
+                                            sx={{
+                                                px: 2,
+                                                py: 1,
+                                                borderRadius: 12,
+                                                display: 'inline-block',
+                                                fontWeight: 'bold',
+                                                textAlign: 'center',
+                                                backgroundColor:
+                                                    selectedProject.status === "En cours"
+                                                        ? "deepskyblue"
+                                                        : selectedProject.status === "Terminé"
+                                                            ? "green"
+                                                            : selectedProject.status === "Archivé"
+                                                                ? "gray"
+                                                                : "lightgray",
+                                                color: "white",
+                                                fontSize: '0.9rem',
+                                            }}
+                                        >
+                                            {selectedProject.status}
+                                        </Typography>
+                                    ) : (
+                                        <Typography variant="body2" color="text.secondary">Indéfini</Typography>
+                                    )}
+                                </Box>
+                                <Box sx={{mt: 3}}>
+                                    {selectedProject.startDate && (
+                                        <Typography variant="body2" color="text.secondary" sx={{mb: 1}}>
+                                            <strong>Début
+                                                :</strong> {dayjs(selectedProject.startDate).format("DD MMM YYYY")}
+                                        </Typography>
+                                    )}
+                                    {selectedProject.endDate && (
+                                        <Typography variant="body2" color="text.secondary">
+                                            <strong>Fin
+                                                :</strong> {dayjs(selectedProject.endDate).format("DD MMM YYYY")}
+                                        </Typography>
+                                    )}
+                                </Box>
                             </DialogContentText>
-                            <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 2}}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    mt: 3,
+                                    gap: 2,
+                                }}
+                            >
                                 {selectedProject.liveUrl && (
                                     <Button
                                         variant="contained"
                                         color="primary"
                                         href={selectedProject.liveUrl}
                                         target="_blank"
-                                        sx={{mb: 2, textTransform: 'none'}}
+                                        sx={{
+                                            width: '80%',
+                                            py: 1,
+                                            fontSize: '1rem',
+                                            textTransform: 'none',
+                                        }}
                                     >
                                         Voir le site en ligne
                                     </Button>
@@ -212,15 +336,25 @@ const ProjectsPage = () => {
                                         color="secondary"
                                         href={selectedProject.repositoryUrl}
                                         target="_blank"
-                                        sx={{textTransform: 'none'}}
+                                        sx={{
+                                            width: '80%',
+                                            py: 1,
+                                            fontSize: '1rem',
+                                            textTransform: 'none',
+                                        }}
                                     >
                                         Voir le dépôt
                                     </Button>
                                 )}
                             </Box>
                         </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleClose} color="primary">
+                        <DialogActions sx={{justifyContent: 'center', py: 2}}>
+                            <Button
+                                onClick={handleClose}
+                                color="primary"
+                                variant="contained"
+                                sx={{px: 4, py: 1, fontSize: '1rem', textTransform: 'none'}}
+                            >
                                 Fermer
                             </Button>
                         </DialogActions>

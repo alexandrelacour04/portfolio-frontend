@@ -145,6 +145,7 @@ const ProjectsPage = () => {
                 startDate: "",
                 endDate: "",
                 coverImage: "",
+                otherImages: "",
                 liveUrl: "",
                 repositoryUrl: "",
                 isPublic: true,
@@ -167,6 +168,66 @@ const ProjectsPage = () => {
         setModalOpen(false);
         setSelectedProject(null);
     };
+
+    const OtherImagesInput = ({ value, onChange }) => {
+        const [inputValue, setInputValue] = useState(""); // Pour la gestion de la saisie
+        const [images, setImages] = useState([]); // Liste des URLs (valeurs locales)
+
+        // Synchronisation avec les nouvelles valeurs de la prop `value`
+        useEffect(() => {
+            if (value) {
+                setImages(value.split("|").map((img) => img.trim())); // Met à jour `images` si `value` change
+            }
+        }, [value]);
+
+        const handleChange = (event, newValue) => {
+            // Met à jour l'état local avec les URLs sélectionnées
+            setImages(newValue);
+
+            // Transmet au parent la liste sous forme de chaîne séparée par des virgules
+            if (onChange) {
+                onChange(newValue.join(","));
+            }
+        };
+
+        return (
+            <Autocomplete
+                multiple
+                freeSolo
+                options={[]} // Pas d'options fixes pour les images (modifiable si besoin)
+                value={images} // Liste des URLs sélectionnées
+                onChange={handleChange} // Gestion de la mise à jour des URLs
+                inputValue={inputValue} // Saisie en cours
+                onInputChange={(event, newInputValue) => {
+                    setInputValue(newInputValue); // Met à jour la valeur de saisie
+                }}
+                renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                        <Chip
+                            key={index}
+                            variant="outlined"
+                            label={option} // Affiche l'URL de l'image comme texte sur le Chip
+                            {...getTagProps({ index })}
+                        />
+                    ))
+                }
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        variant="outlined"
+                        label="Autres images"
+                        placeholder="Ajoutez des URLs d'images"
+                    />
+                )}
+            />
+        );
+    };
+
+    OtherImagesInput.propTypes = {
+        value: PropTypes.string, // Liste d'images sous forme de chaîne (ex: "url1,url2,url3")
+        onChange: PropTypes.func.isRequired, // Fonction appelée lors d'une mise à jour
+    };
+
 
     // Fermer la modal de vue
     const handleCloseViewModal = () => {
@@ -274,6 +335,7 @@ const ProjectsPage = () => {
             setProjects((prev) => prev.filter((project) => project.id !== id));
         } catch (e) {
             setError("Erreur lors de la suppression du projet");
+            console.log(e);
         }
     };
 
@@ -473,6 +535,17 @@ const ProjectsPage = () => {
                                 onChange={handleFormChange}
                                 fullWidth
                                 variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <OtherImagesInput
+                                value={form.otherImages} // Passer les URLs existantes (se référant au projet)
+                                onChange={(newValue) =>
+                                    setForm((prevForm) => ({
+                                        ...prevForm,
+                                        otherImages: newValue, // Mettre à jour les autres images dans le formulaire
+                                    }))
+                                }
                             />
                         </Grid>
                         <Grid item xs={12}>
