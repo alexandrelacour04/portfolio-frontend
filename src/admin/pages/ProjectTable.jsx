@@ -1,17 +1,21 @@
 import React, {useEffect, useState} from "react";
 import {
+    Alert,
     Box,
     Button,
-    Container,
-    Typography,
+    Card,
+    CardActions,
+    CardContent,
+    Chip,
     CircularProgress,
-    Alert,
-    Modal,
-    TextField,
+    Container,
+    FormControlLabel,
     Grid,
     MenuItem,
+    Modal,
     Switch,
-    FormControlLabel, Card, CardContent, CardActions, Chip,
+    TextField,
+    Typography,
 } from "@mui/material";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import axios from "axios";
@@ -169,14 +173,14 @@ const ProjectsPage = () => {
         setSelectedProject(null);
     };
 
-    const OtherImagesInput = ({ value, onChange }) => {
+    const OtherImagesInput = ({value, onChange}) => {
         const [inputValue, setInputValue] = useState(""); // Pour la gestion de la saisie
         const [images, setImages] = useState([]); // Liste des URLs (valeurs locales)
 
         // Synchronisation avec les nouvelles valeurs de la prop `value`
         useEffect(() => {
             if (value) {
-                setImages(value.split("|").map((img) => img.trim())); // Met à jour `images` si `value` change
+                setImages(value.split("|£|").map((img) => img.trim())); // Met à jour `images` si `value` change
             }
         }, [value]);
 
@@ -186,7 +190,7 @@ const ProjectsPage = () => {
 
             // Transmet au parent la liste sous forme de chaîne séparée par des virgules
             if (onChange) {
-                onChange(newValue.join(","));
+                onChange(newValue.join("|£|"));
             }
         };
 
@@ -207,7 +211,7 @@ const ProjectsPage = () => {
                             key={index}
                             variant="outlined"
                             label={option} // Affiche l'URL de l'image comme texte sur le Chip
-                            {...getTagProps({ index })}
+                            {...getTagProps({index})}
                         />
                     ))
                 }
@@ -217,6 +221,16 @@ const ProjectsPage = () => {
                         variant="outlined"
                         label="Autres images"
                         placeholder="Ajoutez des URLs d'images"
+                        multiline
+                        InputProps={{
+                            ...params.InputProps,
+                            sx: {
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                maxHeight: 200,
+                                overflowY: 'auto',
+                            },
+                        }}
                     />
                 )}
             />

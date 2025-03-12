@@ -15,12 +15,19 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle, Chip,
+    DialogTitle,
+    Chip,
+    IconButton
 } from '@mui/material';
 import Header from "../components/header.jsx";
 import axios from 'axios';
 import dayjs from 'dayjs';
 import PageTitle from "../common/pageTitle.jsx"; // Pour le formatage des dates
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -50,6 +57,57 @@ const ProjectsPage = () => {
     const handleOpen = (project) => {
         setSelectedProject(project);
         setOpen(true);
+    };
+
+    // Fonction flèche personnalisée pour "previous"
+    const PrevArrow = ({ onClick }) => {
+        return (
+            <IconButton
+                sx={{
+                    position: "absolute",
+                    left: 0,
+                    top: "50%",
+                    transform: "translate(0, -50%)",
+                    zIndex: 10,
+                    marginLeft: 2,
+                    color: "lightgray",
+                }}
+                onClick={onClick}
+            >
+                <ArrowBackIosIcon />
+            </IconButton>
+        );
+    };
+
+    // Fonction flèche personnalisée pour "next"
+    const NextArrow = ({ onClick }) => {
+        return (
+            <IconButton
+                sx={{
+                    position: "absolute",
+                    right: 0,
+                    top: "50%",
+                    transform: "translate(0, -50%)",
+                    zIndex: 10,
+                    marginRight: 2,
+                    color: "lightgray",
+                }}
+                onClick={onClick}
+            >
+                <ArrowForwardIosIcon />
+            </IconButton>
+        );
+    };
+
+    // Paramètres du slider
+    const sliderSettings = {
+        dots: true, // Ajoute les indicateurs de pagination
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        prevArrow: <PrevArrow />, // Flèche Précédente
+        nextArrow: <NextArrow />, // Flèche Suivante
     };
 
     // Fermer la modale
@@ -193,15 +251,59 @@ const ProjectsPage = () => {
             <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
                 {selectedProject && (
                     <>
-                        {selectedProject.coverImage && (
-                            <CardMedia
-                                component="img"
-                                height="300"
-                                image={selectedProject.coverImage}
-                                alt={selectedProject.title}
-                                sx={{objectFit: "cover"}}
-                            />
-                        )}
+
+                        <Box sx={{maxWidth: "100%", overflow: "hidden"}}>
+                            {/* Carrousel : Utilisation de "otherImages" */}
+                            {selectedProject?.otherImages ? (
+                                <Slider
+                                    {...sliderSettings}
+                                   appendDots={(dots) => (
+                                        <Box
+                                            sx={{
+                                                bottom: -30,
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                gap: 1,
+                                                position: "absolute",
+                                                width: "100%",
+                                            }}
+                                        >
+                                            {dots}
+                                        </Box>
+                                    )}
+                                    dotStyle={{width: 10, height: 10, backgroundColor: "gray", borderRadius: "50%"}}
+                                >
+                                    {selectedProject.otherImages.split('|£|').map((imageUrl, index) => (
+                                        <Box key={index} sx={{textAlign: "center"}}>
+                                            <CardMedia
+                                                component="img"
+                                                height="300"
+                                                image={imageUrl.trim()}
+                                                alt={`Image ${index}`}
+                                                sx={{
+                                                    objectFit: "cover",
+                                                    width: "100%",
+                                                }}
+                                            />
+                                        </Box>
+                                    ))}
+                                </Slider>
+                            ) : (
+                                // Fallback à "coverImage" si "otherImages" est vide
+                                selectedProject?.coverImage && (
+                                    <CardMedia
+                                        component="img"
+                                        height="300"
+                                        image={selectedProject.coverImage}
+                                        alt={selectedProject.title}
+                                        sx={{
+                                            objectFit: "cover",
+                                            width: "100%",
+                                        }}
+                                    />
+                                )
+                            )}
+                        </Box>
                         <DialogTitle
                             sx={{
                                 textAlign: 'center',
@@ -212,7 +314,7 @@ const ProjectsPage = () => {
                         >
                             {selectedProject.title}
                         </DialogTitle>
-                        <DialogContent>
+                        <DialogContent sx={{overflowX: 'hidden'}}>
                             <DialogContentText>
                                 <Typography variant="h6" gutterBottom sx={{fontWeight: 'bold', mb: 2}}>
                                     {selectedProject.subtitle}

@@ -1,10 +1,9 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Box, Button, Container, Typography, Grid, Paper} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import Header from '../components/header.jsx';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faGithub, faLinkedin, faTwitter} from '@fortawesome/free-brands-svg-icons';
-import PageTitle from "../common/pageTitle.jsx";
+import {faGithub, faLinkedin} from '@fortawesome/free-brands-svg-icons';
 
 const HomePage = () => {
     const theme = useTheme();
@@ -63,9 +62,9 @@ const HomePage = () => {
                         lineHeight: 1.8,
                     }}
                 >
-                    Bonjour, je m'appelle Alexandre Lacour, développeur passionné par les technologies modernes et les
+                    Bonjour, je m&#39;appelle Alexandre Lacour, développeur passionné par les technologies modernes et les
                     solutions innovantes.
-                    J'aime créer des applications web simples, performantes et adaptées aux besoins.
+                    J&#39;aime créer des applications web simples, performantes et adaptées aux besoins.
                     Que ce soit pour un projet ambitieux ou pour améliorer une idée existante, je suis
                     là pour apporter des solutions pratiques et efficaces.
                 </Typography>
@@ -194,8 +193,8 @@ const HomePage = () => {
                             Contact & Collaboration
                         </Typography>
                         <Typography variant="body1" sx={{fontSize: '1rem', lineHeight: 1.6}}>
-                            Ouvert aux nouvelles opportunités et projets. N'hésitez pas à me contacter pour discuter
-                            d'une collaboration ou échanger des idées.
+                            Ouvert aux nouvelles opportunités et projets. N&#39;hésitez pas à me contacter pour discuter
+                            d&#39;une collaboration ou échanger des idées.
                         </Typography>
                     </Paper>
                 </Grid>
