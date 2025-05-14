@@ -1,18 +1,33 @@
-import React, {useState, useMemo} from 'react';
-import {createTheme, ThemeProvider, responsiveFontSizes} from '@mui/material/styles';
+import React, { createContext, useState, useMemo, useEffect } from 'react';
+import { createTheme, ThemeProvider, responsiveFontSizes } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import {blue, lightBlue} from '@mui/material/colors';
+import { blue, lightBlue } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 import MyAppBar from '../components/header';
+import { Box, Typography } from '@mui/material';
 
-const AppThemeProvider = ({children}) => {
-    const [mode, setMode] = useState('light');
+export const ThemeContext = createContext({
+    mode: 'light',
+    toggleThemeMode: () => {},
+});
+
+const AppThemeProvider = ({ children }) => {
+    const [mode, setMode] = useState(() => localStorage.getItem('themeMode') || 'light');
+
+    useEffect(() => {
+        localStorage.setItem('themeMode', mode);
+    }, [mode]);
 
     const toggleThemeMode = () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        setMode((prevMode) => {
+            const newMode = prevMode === 'light' ? 'dark' : 'light';
+            console.log('toggleThemeMode: Nouveau mode =', newMode);
+            return newMode;
+        });
     };
 
     const theme = useMemo(() => {
+        console.log('Création du thème pour mode =', mode);
         let baseTheme = createTheme({
             palette: {
                 mode,
@@ -37,11 +52,11 @@ const AppThemeProvider = ({children}) => {
                         body: {
                             backgroundColor: mode === 'light' ? '#ffffff' : '#121212',
                             color: mode === 'light' ? '#213547' : '#e0e0e0',
-                            display: "flex",
-                            flexDirection: "column",
+                            display: 'flex',
+                            flexDirection: 'column',
                             margin: 0,
                             padding: 0,
-                            minHeight: "100vh",
+                            minHeight: '100vh',
                             width: '100%',
                             overflowX: 'hidden',
                         },
@@ -64,15 +79,6 @@ const AppThemeProvider = ({children}) => {
                             position: 'sticky',
                             top: 0,
                             zIndex: 1100,
-                        },
-                    },
-                },
-                MuiContainer: {
-                    styleOverrides: {
-                        root: {
-                            maxWidth: '100%',
-                            paddingLeft: 0,
-                            paddingRight: 0,
                         },
                     },
                 },
@@ -109,51 +115,32 @@ const AppThemeProvider = ({children}) => {
                         root: {
                             backgroundColor: mode === 'light' ? '#ffffff' : '#1e1e1e',
                             padding: '16px',
-                        }
-                    }
+                        },
+                    },
                 },
-                MuiTableCell: {
-                    styleOverrides: {
-                        root: {
-                            borderBottom: `1px solid ${mode === 'light'
-                                ? 'rgba(0, 0, 0, 0.12)'
-                                : 'rgba(224, 224, 224, 0.2)'}`
-                        }
-                    }
-                },
-                MuiTextField: {
-                    styleOverrides: {
-                        root: {
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: mode === 'light'
-                                        ? 'rgba(0, 0, 0, 0.23)'
-                                        : 'rgba(224, 224, 224, 0.3)',
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: blue[400],
-                                },
-                            },
-                        }
-                    }
-                }
-            }
+            },
         });
 
+        console.log('Thème créé:', baseTheme.palette);
         return responsiveFontSizes(baseTheme);
     }, [mode]);
 
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <MyAppBar mode={mode} toggleThemeMode={toggleThemeMode}/>
-            {children}
-        </ThemeProvider>
+        <ThemeContext.Provider value={{ mode, toggleThemeMode }}>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <MyAppBar />
+                <Box sx={{ p: 2, bgcolor: 'background.default', color: 'text.primary' }}>
+                    <Typography variant="body2">Mode actuel: {mode}</Typography>
+                </Box>
+                {children}
+            </ThemeProvider>
+        </ThemeContext.Provider>
     );
 };
 
 AppThemeProvider.propTypes = {
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
 };
 
 export default AppThemeProvider;

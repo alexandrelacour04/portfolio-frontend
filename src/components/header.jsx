@@ -1,33 +1,39 @@
-import React, {useState} from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import LightModeIcon from "@mui/icons-material/LightMode"; // Icône de mode clair
-import DarkModeIcon from "@mui/icons-material/DarkMode"; // Icône de mode sombre
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import Divider from "@mui/material/Divider";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import HomeIcon from "@mui/icons-material/Home";
-import InfoIcon from "@mui/icons-material/Info";
-import WorkIcon from "@mui/icons-material/Work";
-import TimelineIcon from "@mui/icons-material/Timeline";
-import ContactsIcon from "@mui/icons-material/Contacts";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import LoginModal from "./LoginModal.jsx";
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import HomeIcon from '@mui/icons-material/Home';
+import InfoIcon from '@mui/icons-material/Info';
+import WorkIcon from '@mui/icons-material/Work';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import ContactsIcon from '@mui/icons-material/Contacts';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import LoginModal from './LoginModal.jsx';
+import { ThemeContext } from '../theme/ThemeProvider';
 
-function MyAppBar({mode, toggleThemeMode}) {
+function MyAppBar() {
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const [loginModalOpen, setLoginModalOpen] = useState(false); // Déclaration avec useState
+    const [loginModalOpen, setLoginModalOpen] = useState(false);
+    const { mode, toggleThemeMode } = useContext(ThemeContext);
+    const navigate = useNavigate();
+
+    console.log('MyAppBar rendu avec mode =', mode);
 
     const toggleDrawer = (open) => (event) => {
-        if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
         }
         setDrawerOpen(open);
@@ -38,73 +44,70 @@ function MyAppBar({mode, toggleThemeMode}) {
     };
 
     const handleLoginSuccess = (user) => {
-        console.log("Utilisateur connecté :", user);
-        // Exemple : Vérification si l'utilisateur est admin
-        if (user.role !== "USER") {
-            // Rediriger vers la page admin
-            window.location.href = "/admin";
+        console.log('Utilisateur connecté :', user);
+        if (user.role !== 'USER') {
+            navigate('/admin');
         } else {
-            alert("Accès refusé. Vous n'êtes pas autorisé.");
+            alert('Accès refusé. Vous n’êtes pas autorisé.');
         }
     };
 
     const pages = [
-        {name: "Accueil", icon: <HomeIcon/>, onClick: () => (window.location.href = "/")},
-        {name: "Timeline", icon: <TimelineIcon/>, onClick: () => (window.location.href = "/timeline")},
-        {name: "À propos", icon: <InfoIcon/>, onClick: () => (window.location.href = "/a-propos")},
-        {name: "Projets", icon: <WorkIcon/>, onClick: () => (window.location.href = "/projets")},
-        {name: "Contact", icon: <ContactsIcon/>, onClick: () => (window.location.href = "/contact")},
-        {name: "Admin", icon: <AdminPanelSettingsIcon/>, onClick: handleAdminClick},
+        { name: 'Accueil', icon: <HomeIcon />, onClick: () => navigate('/') },
+        { name: 'Timeline', icon: <TimelineIcon />, onClick: () => navigate('/timeline') },
+        { name: 'À propos', icon: <InfoIcon />, onClick: () => navigate('/a-propos') },
+        { name: 'Projets', icon: <WorkIcon />, onClick: () => navigate('/projets') },
+        { name: 'Contact', icon: <ContactsIcon />, onClick: () => navigate('/contact') },
+        { name: 'Admin', icon: <AdminPanelSettingsIcon />, onClick: handleAdminClick },
     ];
 
     return (
         <>
-            <AppBar position="sticky" sx={{
-                backgroundColor: "#1976d2", // Couleur du header (modifiable via le thème)
-                margin: 0, // Supprime toute marge supplémentaire
-                padding: 0, // Supprime tout padding supplémentaire
-                top: 0, // Colle le header au haut
-                left: 0, // Centre horizontalement en supprimant tout décalage gauche
-                width: "100%", // S'étend sur toute la largeur
-                boxShadow: "none", // Supprime les ombres si non nécessaire
-            }}
+            <AppBar
+                position="sticky"
+                sx={{
+                    bgcolor: 'primary.main', // Utilise la palette du thème
+                    margin: 0,
+                    padding: 0,
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    boxShadow: 'none',
+                }}
             >
-                <Toolbar sx={{
-                    padding: 0, // Supprime tout padding
-                    minHeight: "64px", // Définit une hauteur normale
-                }}>
-                    {/* Icône de Menu */}
+                <Toolbar sx={{ padding: 0, minHeight: '64px' }}>
                     <IconButton
                         size="large"
                         edge="start"
                         color="inherit"
                         aria-label="menu"
-                        sx={{mr: 2}}
+                        sx={{ mr: 2 }}
                         onClick={toggleDrawer(true)}
                     >
-                        <MenuIcon/>
+                        <MenuIcon />
                     </IconButton>
 
-                    {/* Titre */}
                     <Typography
                         variant="h6"
                         component="div"
-                        sx={{flexGrow: 1, fontWeight: "bold"}}
+                        sx={{ flexGrow: 1, fontWeight: 'bold', color: 'text.primary' }}
                     >
                         Alexandre LACOUR
                     </Typography>
 
-                    {/* Bouton de bascule de thème */}
                     <IconButton
                         edge="end"
                         color="inherit"
-                        onClick={toggleThemeMode} // Appelle la fonction de bascule
+                        onClick={() => {
+                            console.log('Bouton thème cliqué');
+                            toggleThemeMode();
+                        }}
                         aria-label="toggle theme"
+                        title={mode === 'light' ? 'Passer au mode sombre' : 'Passer au mode clair'}
                     >
-                        {mode === "light" ? <DarkModeIcon/> : <LightModeIcon/>}
+                        {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
                     </IconButton>
 
-                    {/* Drawer */}
                     <Drawer
                         anchor="left"
                         open={drawerOpen}
@@ -112,9 +115,9 @@ function MyAppBar({mode, toggleThemeMode}) {
                         slotProps={{
                             paper: {
                                 sx: {
-                                    "&::-webkit-scrollbar": {display: "none"},
-                                    msOverflowStyle: "none", // For Internet Explorer and Edge
-                                    scrollbarWidth: "none", // For Firefox
+                                    '&::-webkit-scrollbar': { display: 'none' },
+                                    msOverflowStyle: 'none',
+                                    scrollbarWidth: 'none',
                                 },
                             },
                         }}
@@ -123,8 +126,9 @@ function MyAppBar({mode, toggleThemeMode}) {
                             component="nav"
                             sx={{
                                 width: 250,
-                                backgroundColor: (theme) => theme.palette.background.paper,
-                                height: "100%",
+                                bgcolor: 'background.paper', // Utilise le thème
+                                height: '100%',
+                                color: 'text.primary', // Utilise le thème
                             }}
                             aria-label="Navigation menu"
                             onKeyDown={toggleDrawer(false)}
@@ -132,22 +136,24 @@ function MyAppBar({mode, toggleThemeMode}) {
                             <Typography
                                 variant="h6"
                                 sx={{
-                                    textAlign: "center",
+                                    textAlign: 'center',
                                     padding: 2,
-                                    fontWeight: "bold",
-                                    backgroundColor: (theme) => theme.palette.primary.main,
-                                    color: "#ffffff",
+                                    fontWeight: 'bold',
+                                    bgcolor: 'primary.main', // Utilise le thème
+                                    color: 'text.contrastText', // Contraste pour le texte
                                 }}
                             >
                                 Navigation
                             </Typography>
-                            <Divider/>
+                            <Divider />
                             <List>
                                 {pages.map((page, index) => (
                                     <ListItem key={index} disablePadding>
                                         <ListItemButton onClick={page.onClick}>
-                                            <ListItemIcon>{page.icon}</ListItemIcon>
-                                            <ListItemText primary={page.name}/>
+                                            <ListItemIcon sx={{ color: 'text.primary' }}>
+                                                {page.icon}
+                                            </ListItemIcon>
+                                            <ListItemText primary={page.name} />
                                         </ListItemButton>
                                     </ListItem>
                                 ))}
@@ -157,7 +163,6 @@ function MyAppBar({mode, toggleThemeMode}) {
                 </Toolbar>
             </AppBar>
 
-            {/* Modale de connexion */}
             <LoginModal
                 open={loginModalOpen}
                 onClose={() => setLoginModalOpen(false)}
