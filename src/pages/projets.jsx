@@ -22,7 +22,7 @@ import {
 import Header from "../components/header.jsx";
 import axios from 'axios';
 import dayjs from 'dayjs';
-import PageTitle from "../common/pageTitle.jsx"; // Pour le formatage des dates
+import PageTitle from "../common/pageTitle.jsx";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -32,18 +32,18 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ProjectsPage = () => {
-    const [projects, setProjects] = useState([]); // Liste des projets
-    const [loading, setLoading] = useState(true); // État de chargement
-    const [error, setError] = useState(null); // État d'erreur
-    const [open, setOpen] = useState(false); // État d'ouverture de la modale
-    const [selectedProject, setSelectedProject] = useState(null); // Projet actuellement sélectionné
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    // Charger les projets depuis l'API
     useEffect(() => {
         const fetchProjects = async () => {
             try {
                 const response = await axios.get(`${API_BASE_URL}/api/projects`);
-                setProjects(response.data.content); // Stocker les projets dans le state
+                setProjects(response.data.content);
             } catch (e) {
                 setError("Erreur lors de la récupération des projets.");
             } finally {
@@ -53,14 +53,13 @@ const ProjectsPage = () => {
         fetchProjects();
     }, []);
 
-    // Ouvrir la modale pour afficher les détails d'un projet
     const handleOpen = (project) => {
         setSelectedProject(project);
+        setCurrentImageIndex(0);
         setOpen(true);
     };
 
-    // Fonction flèche personnalisée pour "previous"
-    const PrevArrow = ({ onClick }) => {
+    const PrevArrow = ({onClick}) => {
         return (
             <IconButton
                 sx={{
@@ -72,15 +71,20 @@ const ProjectsPage = () => {
                     marginLeft: 2,
                     color: "lightgray",
                 }}
-                onClick={onClick}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onClick();
+                    if (currentImageIndex > 0) {
+                        setCurrentImageIndex(prev => prev - 1);
+                    }
+                }}
             >
-                <ArrowBackIosIcon />
+                <ArrowBackIosIcon/>
             </IconButton>
         );
     };
 
-    // Fonction flèche personnalisée pour "next"
-    const NextArrow = ({ onClick }) => {
+    const NextArrow = ({onClick}) => {
         return (
             <IconButton
                 sx={{
@@ -92,28 +96,35 @@ const ProjectsPage = () => {
                     marginRight: 2,
                     color: "lightgray",
                 }}
-                onClick={onClick}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onClick();
+                    if (selectedProject?.otherImages &&
+                        currentImageIndex < selectedProject.otherImages.split('|£|').length - 1) {
+                        setCurrentImageIndex(prev => prev + 1);
+                    }
+                }}
             >
-                <ArrowForwardIosIcon />
+                <ArrowForwardIosIcon/>
             </IconButton>
         );
     };
 
-    // Paramètres du slider
     const sliderSettings = {
-        dots: true, // Ajoute les indicateurs de pagination
+        dots: true,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
-        prevArrow: <PrevArrow />, // Flèche Précédente
-        nextArrow: <NextArrow />, // Flèche Suivante
+        prevArrow: <PrevArrow/>,
+        nextArrow: <NextArrow/>,
+        beforeChange: (current, next) => setCurrentImageIndex(next)
     };
 
-    // Fermer la modale
     const handleClose = () => {
         setOpen(false);
         setSelectedProject(null);
+        setCurrentImageIndex(0);
     };
 
     if (loading) {
@@ -125,7 +136,7 @@ const ProjectsPage = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    justifyContent: 'flex-start', // Align content to the top
+                    justifyContent: 'flex-start',
                     minHeight: '100vh',
                     textAlign: 'center'
                 }}
@@ -144,7 +155,7 @@ const ProjectsPage = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    justifyContent: 'flex-start', // Align content to the top
+                    justifyContent: 'flex-start',
                     minHeight: '100vh',
                     textAlign: 'center'
                 }}
@@ -156,7 +167,7 @@ const ProjectsPage = () => {
 
     return (
         <>
-            <PageTitle title="Projets" />
+            <PageTitle title="Projets"/>
             <title>Mes Projets</title>
             <Header/>
             <Container
@@ -166,7 +177,7 @@ const ProjectsPage = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    justifyContent: 'flex-start', // Align content to the top
+                    justifyContent: 'flex-start',
                     minHeight: '100vh',
                     textAlign: 'center'
                 }}
@@ -247,17 +258,14 @@ const ProjectsPage = () => {
                 )}
             </Container>
 
-            {/* Dialog pour afficher les détails du projet */}
             <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
                 {selectedProject && (
                     <>
-
-                        <Box sx={{maxWidth: "100%", overflow: "hidden"}}>
-                            {/* Carrousel : Utilisation de "otherImages" */}
+                        <Box sx={{maxWidth: "100%", overflow: "hidden", position: "relative"}}>
                             {selectedProject?.otherImages ? (
                                 <Slider
                                     {...sliderSettings}
-                                   appendDots={(dots) => (
+                                    appendDots={(dots) => (
                                         <Box
                                             sx={{
                                                 bottom: -30,
@@ -274,7 +282,7 @@ const ProjectsPage = () => {
                                     dotStyle={{width: 10, height: 10, backgroundColor: "gray", borderRadius: "50%"}}
                                 >
                                     {selectedProject.otherImages.split('|£|').map((imageUrl, index) => (
-                                        <Box key={index} sx={{textAlign: "center"}}>
+                                        <Box key={index} sx={{textAlign: "center", position: "relative"}}>
                                             <CardMedia
                                                 component="img"
                                                 height="300"
@@ -285,11 +293,24 @@ const ProjectsPage = () => {
                                                     width: "100%",
                                                 }}
                                             />
+                                            <Typography
+                                                variant="caption"
+                                                sx={{
+                                                    position: "absolute",
+                                                    bottom: 10,
+                                                    right: 10,
+                                                    backgroundColor: "rgba(0,0,0,0.7)",
+                                                    color: "white",
+                                                    padding: "4px 8px",
+                                                    borderRadius: "4px"
+                                                }}
+                                            >
+                                                {`${index + 1} / ${selectedProject.otherImages.split('|£|').length}`}
+                                            </Typography>
                                         </Box>
                                     ))}
                                 </Slider>
                             ) : (
-                                // Fallback à "coverImage" si "otherImages" est vide
                                 selectedProject?.coverImage && (
                                     <CardMedia
                                         component="img"

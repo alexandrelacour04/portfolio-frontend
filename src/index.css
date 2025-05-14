@@ -13,6 +13,23 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* S'assure que tout s'étend bien verticalement */
+  width: 100%; /* Permet au header et aux conteneurs de s'afficher correctement */
+  overflow-x: hidden; /* Évite tout défilement horizontal inattendu */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: transparent; /* Laisse `MuiThemeProvider` définir la couleur */
+  color: inherit; /* Inhérent au thème */
+  display: block;
+  min-height: 100vh;
+}
+
 a {
   font-weight: 500;
   color: #646cff;

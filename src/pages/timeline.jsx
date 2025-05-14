@@ -7,6 +7,7 @@ import {
     TimelineContent,
     TimelineDot, TimelineOppositeContent
 } from '@mui/lab';
+import {useTheme} from '@mui/material/styles';
 import {
     Typography,
     Container,
@@ -23,29 +24,27 @@ import {
 import Header from "../components/header.jsx";
 import axios from 'axios';
 import * as Icons from "@mui/icons-material";
-import dayjs from "dayjs"; // Import dayjs for date formatting
+import dayjs from "dayjs";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const PortfolioTimeline = () => {
-    const [events, setEvents] = useState([]); // Liste des événements
-    const [loading, setLoading] = useState(true); // État de chargement
-    const [error, setError] = useState(null); // État d'erreur
-    const [open, setOpen] = useState(false); // État d'ouverture de la modale
-    const [selectedEvent, setSelectedEvent] = useState(null); // Événement actuellement sélectionné
+    const theme = useTheme();
+    const [events, setEvents] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
-    // Charger les données depuis l'API
     useEffect(() => {
         const fetchTimelines = async () => {
             try {
                 const response = await axios.get(`${API_BASE_URL}/api/timelines`);
-
-                // Trier les événements par date (plus ancienne en premier)
                 const sortedData = response.data.content.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-                setEvents(sortedData); // Stocker les données triées dans le state
+                setEvents(sortedData);
             } catch (e) {
                 setError("Erreur lors de la récupération des données de la timeline.");
+                console.log(e)
             } finally {
                 setLoading(false);
             }
@@ -53,7 +52,6 @@ const PortfolioTimeline = () => {
         fetchTimelines();
     }, []);
 
-    // Fonction pour sélectionner une icône en fonction du type
     const getIconByType = (type) => {
         switch (type) {
             case 'EXPÉRIENCE':
@@ -73,13 +71,11 @@ const PortfolioTimeline = () => {
         }
     };
 
-    // Ouvrir la modale avec l'événement sélectionné
     const handleOpen = (event) => {
         setSelectedEvent(event);
         setOpen(true);
     };
 
-    // Fermer la modale
     const handleClose = () => {
         setOpen(false);
         setSelectedEvent(null);
@@ -102,70 +98,70 @@ const PortfolioTimeline = () => {
     }
 
     return (
-        <>
-            {/* Header Section */}
+        <Box
+            sx={{
+                width: "100%",
+                minHeight: "100vh",
+                backgroundColor: theme.palette.background.default,
+                color: theme.palette.text.primary,
+            }}
+        >
             <Header/>
-
-            <Container
-                sx={{mt: 4, display: "flex", justifyContent: "center", alignItems: "flex-start", height: "100vh"}}>
-                <Box sx={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
-                    <Typography variant="h4" color="text.primary" sx={{mb: 3}}>
-                        Portfolio Timeline
-                    </Typography>
-                    {events.length === 0 ? (
-                        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4}}>
-                            <Icons.Construction color="action" style={{fontSize: 60}}/>
-                            <Typography variant="h6" color="text.secondary" sx={{mt: 2}}>
-                                En cours de travaux
-                            </Typography>
-                        </Box>
-                    ) : (
-                        <Timeline position="alternate" sx={{maxWidth: '800px', width: '100%'}}>
-                            {events.map((event) => (
-                                <TimelineItem key={event.id}>
-                                    <TimelineOppositeContent color="text.secondary">
-                                        {dayjs(event.date).format("DD/MM/YYYY")}
-                                    </TimelineOppositeContent>
-                                    <TimelineSeparator>
-                                        <TimelineDot>
-                                            {getIconByType(event.type)} {/* Affiche l'icône */}
-                                        </TimelineDot>
-                                        <TimelineConnector/>
-                                    </TimelineSeparator>
-                                    <TimelineContent>
-                                        <Box
-                                            sx={{
-                                                mb: 2,
-                                                padding: 2,
-                                                borderRadius: 2,
-                                                backgroundColor: '#f5f5f5',
-                                                cursor: 'pointer',
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                '&:hover': {
-                                                    backgroundColor: '#e0e0e0',
-                                                },
-                                            }}
-                                            onClick={() => handleOpen(event)} // Ouvrir la modale à clic
-                                        >
-                                            <Typography variant="h6" color="text.primary"
-                                                        sx={{fontWeight: 'bold', wordBreak: 'break-word'}}>
-                                                {event.titre}
-                                            </Typography>
-                                            <Typography variant="subtitle1" color="text.secondary"
-                                                        sx={{mb: 1, wordBreak: 'break-word'}}>
-                                                {event.sousTitre}
-                                            </Typography>
-                                        </Box>
-                                    </TimelineContent>
-                                </TimelineItem>
-                            ))}
-                        </Timeline>
-                    )}
-                </Box>
+            <Container>
+                <Typography variant="h4" sx={{mb: 3, textAlign: "center", paddingTop: 4, paddingBottom: 2, fontWeight: 'bold'}}>
+                    Portfolio Timeline
+                </Typography>
+                {events.length === 0 ? (
+                    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4}}>
+                        <Icons.Construction color="action" style={{fontSize: 60}}/>
+                        <Typography variant="h6" color="text.secondary" sx={{mt: 2}}>
+                            En cours de travaux
+                        </Typography>
+                    </Box>
+                ) : (
+                    <Timeline position="alternate" sx={{maxWidth: '800px', mx: "auto"}}>
+                        {events.map((event) => (
+                            <TimelineItem key={event.id}>
+                                <TimelineOppositeContent color="text.secondary">
+                                    {dayjs(event.date).format("DD/MM/YYYY")}
+                                </TimelineOppositeContent>
+                                <TimelineSeparator>
+                                    <TimelineDot>
+                                        {getIconByType(event.type)}
+                                    </TimelineDot>
+                                    <TimelineConnector/>
+                                </TimelineSeparator>
+                                <TimelineContent>
+                                    <Box
+                                        sx={{
+                                            mb: 2,
+                                            padding: 2,
+                                            borderRadius: 2,
+                                            backgroundColor: theme.palette.background.paper,
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            boxShadow: 1,
+                                            '&:hover': {
+                                                backgroundColor: theme.palette.action.hover,
+                                            },
+                                        }}
+                                        onClick={() => handleOpen(event)}
+                                    >
+                                        <Typography variant="h6" sx={{fontWeight: 'bold', wordBreak: 'break-word'}}>
+                                            {event.titre}
+                                        </Typography>
+                                        <Typography variant="subtitle1" sx={{mb: 1, wordBreak: 'break-word'}}>
+                                            {event.sousTitre}
+                                        </Typography>
+                                    </Box>
+                                </TimelineContent>
+                            </TimelineItem>
+                        ))}
+                    </Timeline>
+                )}
             </Container>
 
-            {/* Modale pour afficher les détails */}
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>{selectedEvent?.titre || "Détails de l'événement"}</DialogTitle>
                 <DialogContent>
@@ -191,7 +187,7 @@ const PortfolioTimeline = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </>
+        </Box>
     );
 };
 

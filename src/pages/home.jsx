@@ -1,5 +1,5 @@
-import React from 'react';
-import {Box, Button, Container, Typography, Grid, Paper} from '@mui/material';
+import React, {useEffect} from 'react';
+import {Box, Button, Container, Typography, Stack, Paper} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import Header from '../components/header.jsx';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -8,9 +8,13 @@ import {faGithub, faLinkedin} from '@fortawesome/free-brands-svg-icons';
 const HomePage = () => {
     const theme = useTheme();
 
+    // Met à jour le titre de l'onglet
+    useEffect(() => {
+        document.title = "Home"; // Définit le titre de la page
+    }, []);
+
 
     return (
-
         <Box
             sx={{
                 minHeight: '100vh',
@@ -23,9 +27,6 @@ const HomePage = () => {
                 overflowX: 'hidden',
             }}
         >
-            {/*<PageTitle title="Accueil" />*/}
-
-            {/* Header Section */}
             <Header/>
 
             <Container
@@ -62,7 +63,8 @@ const HomePage = () => {
                         lineHeight: 1.8,
                     }}
                 >
-                    Bonjour, je m&#39;appelle Alexandre Lacour, développeur passionné par les technologies modernes et les
+                    Bonjour, je m&#39;appelle Alexandre Lacour, développeur passionné par les technologies modernes et
+                    les
                     solutions innovantes.
                     J&#39;aime créer des applications web simples, performantes et adaptées aux besoins.
                     Que ce soit pour un projet ambitieux ou pour améliorer une idée existante, je suis
@@ -84,123 +86,121 @@ const HomePage = () => {
                 </Button>
             </Container>
 
-            <Grid
-                container
+            <Stack
+                direction={{xs: 'column', md: 'row'}}
                 spacing={4}
                 justifyContent="center"
                 sx={{
-                    maxWidth: '100%',
+                    width: '100%',
                     padding: theme.spacing(6),
                 }}
             >
-                <Grid item xs={12} md={4}>
-                    <Paper
-                        elevation={5}
+                <Paper
+                    elevation={5}
+                    sx={{
+                        padding: theme.spacing(5),
+                        textAlign: 'center',
+                        backgroundColor: theme.palette.background.paper,
+                        boxShadow: `0 10px 20px ${theme.palette.primary.light}`,
+                        transition: 'transform 0.3s ease-in-out',
+                        minHeight: 200,
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        '&:hover': {
+                            transform: 'scale(1.05)',
+                        },
+                    }}
+                >
+                    <Typography
+                        variant="h5"
+                        gutterBottom
                         sx={{
-                            padding: theme.spacing(5),
-                            textAlign: 'center',
-                            backgroundColor: theme.palette.background.paper,
-                            boxShadow: `0 10px 20px ${theme.palette.primary.light}`,
-                            transition: 'transform 0.3s ease-in-out',
-                            minHeight: 200,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            '&:hover': {
-                                transform: 'scale(1.05)',
-                            },
+                            fontWeight: 'bold',
+                            color: theme.palette.primary.dark,
+                            letterSpacing: 1,
                         }}
                     >
-                        <Typography
-                            variant="h5"
-                            gutterBottom
-                            sx={{
-                                fontWeight: 'bold',
-                                color: theme.palette.primary.dark,
-                                letterSpacing: 1,
-                            }}
-                        >
-                            Compétences Techniques
-                        </Typography>
-                        <Typography variant="body1" sx={{fontSize: '1rem', lineHeight: 1.6}}>
-                            Expertise en React, Node.js, Java, Spring Boot, DevOps et autres
-                            technologies indispensables à la réussite de vos projets.
-                        </Typography>
-                    </Paper>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <Paper
-                        elevation={5}
-                        sx={{
-                            padding: theme.spacing(5),
-                            textAlign: 'center',
-                            backgroundColor: theme.palette.background.paper,
-                            boxShadow: `0 10px 20px ${theme.palette.primary.light}`,
-                            transition: 'transform 0.3s ease-in-out',
-                            minHeight: 200,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            '&:hover': {
-                                transform: 'scale(1.05)',
-                            },
-                        }}
-                    >
-                        <Typography
-                            variant="h5"
-                            gutterBottom
-                            sx={{
-                                fontWeight: 'bold',
-                                color: theme.palette.primary.dark,
-                                letterSpacing: 1,
-                            }}
-                        >
-                            Projets Innovants
-                        </Typography>
-                        <Typography variant="body1" sx={{fontSize: '1rem', lineHeight: 1.6}}>
-                            Un aperçu de projets combinant performance, innovation
-                            et design soigné. Découvrez des solutions adaptées à divers enjeux.
-                        </Typography>
-                    </Paper>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                    <Paper
-                        elevation={5}
-                        sx={{
-                            padding: theme.spacing(5),
-                            textAlign: 'center',
-                            backgroundColor: theme.palette.background.paper,
-                            boxShadow: `0 10px 20px ${theme.palette.primary.light}`,
-                            transition: 'transform 0.3s ease-in-out',
-                            minHeight: 200,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            '&:hover': {
-                                transform: 'scale(1.05)',
-                            }
-                        }}
-                    >
-                        <Typography
-                            variant="h5"
-                            gutterBottom
-                            sx={{
-                                fontWeight: 'bold',
-                                color: theme.palette.primary.dark,
-                                letterSpacing: 1,
-                            }}
-                        >
-                            Contact & Collaboration
-                        </Typography>
-                        <Typography variant="body1" sx={{fontSize: '1rem', lineHeight: 1.6}}>
-                            Ouvert aux nouvelles opportunités et projets. N&#39;hésitez pas à me contacter pour discuter
-                            d&#39;une collaboration ou échanger des idées.
-                        </Typography>
-                    </Paper>
-                </Grid>
-            </Grid>
+                        Compétences Techniques
+                    </Typography>
+                    <Typography variant="body1" sx={{fontSize: '1rem', lineHeight: 1.6}}>
+                        Expertise en React, Node.js, Java, Spring Boot, DevOps et autres
+                        technologies indispensables à la réussite de vos projets.
+                    </Typography>
+                </Paper>
 
-            {/* Footer */}
+                <Paper
+                    elevation={5}
+                    sx={{
+                        padding: theme.spacing(5),
+                        textAlign: 'center',
+                        backgroundColor: theme.palette.background.paper,
+                        boxShadow: `0 10px 20px ${theme.palette.primary.light}`,
+                        transition: 'transform 0.3s ease-in-out',
+                        minHeight: 200,
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        '&:hover': {
+                            transform: 'scale(1.05)',
+                        },
+                    }}
+                >
+                    <Typography
+                        variant="h5"
+                        gutterBottom
+                        sx={{
+                            fontWeight: 'bold',
+                            color: theme.palette.primary.dark,
+                            letterSpacing: 1,
+                        }}
+                    >
+                        Projets Innovants
+                    </Typography>
+                    <Typography variant="body1" sx={{fontSize: '1rem', lineHeight: 1.6}}>
+                        Un aperçu de projets combinant performance, innovation
+                        et design soigné. Découvrez des solutions adaptées à divers enjeux.
+                    </Typography>
+                </Paper>
+
+                <Paper
+                    elevation={5}
+                    sx={{
+                        padding: theme.spacing(5),
+                        textAlign: 'center',
+                        backgroundColor: theme.palette.background.paper,
+                        boxShadow: `0 10px 20px ${theme.palette.primary.light}`,
+                        transition: 'transform 0.3s ease-in-out',
+                        minHeight: 200,
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        '&:hover': {
+                            transform: 'scale(1.05)',
+                        }
+                    }}
+                >
+                    <Typography
+                        variant="h5"
+                        gutterBottom
+                        sx={{
+                            fontWeight: 'bold',
+                            color: theme.palette.primary.dark,
+                            letterSpacing: 1,
+                        }}
+                    >
+                        Contact & Collaboration
+                    </Typography>
+                    <Typography variant="body1" sx={{fontSize: '1rem', lineHeight: 1.6}}>
+                        Ouvert aux nouvelles opportunités et projets. N&#39;hésitez pas à me contacter pour discuter
+                        d&#39;une collaboration ou échanger des idées.
+                    </Typography>
+                </Paper>
+            </Stack>
+
             <Box
                 component="footer"
                 sx={{
@@ -238,15 +238,6 @@ const HomePage = () => {
                     >
                         LinkedIn
                     </Button>
-                    {/*<Button*/}
-                    {/*    variant="outlined"*/}
-                    {/*    color="inherit"*/}
-                    {/*    startIcon={<FontAwesomeIcon icon={faTwitter}/>}*/}
-                    {/*    href="https://twitter.com/votreprofil"*/}
-                    {/*    target="_blank"*/}
-                    {/*>*/}
-                    {/*    Twitter*/}
-                    {/*</Button>*/}
                 </Box>
             </Box>
         </Box>
